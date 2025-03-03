@@ -1,9 +1,9 @@
 # Duckit
 
-The back-end provided doesn't allow CORS so I created an Express proxy server. The proxy server should be started with `node proxy.js`.
-It can be turned on an off in `config/api.ts`.
+The back-end provided doesn't allow CORS so I created an Express proxy server. The proxy server should be started with `npm run proxy`.
+It can be turned on and off in `config/api.ts`.
 
-The instructions say to pass a Bearer token when upvoting and downvoting. Weirdly when this token is passed the back-end returns a 403 error. However with an invalid token the back-end allows upvoting and downvoting. So in `hooks/useDuckVote.ts` I added a `-WTF` string to the end of the token.
+The instructions say to pass a Bearer token when upvoting and downvoting. Weirdly when this token is passed the back-end returns a 403 error. However with an invalid token the back-end allows upvoting and downvoting. So in `hooks/useDuckVote.ts` I've added a `-WTF` string to the end of the token.
 
 I've chosen to display the images cropped because none are square and I think it looks better this way than with gutters all over the place.
 

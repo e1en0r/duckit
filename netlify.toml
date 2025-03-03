@@ -1,0 +1,15 @@
+[build]
+base = "./"
+publish = "dist/"
+command = "npm install && npm run build"
+
+[[redirects]]
+from = "/api/*"
+to = "https://nametag-duckit-2.uc.r.appspot.com/:splat"
+status = 200
+force = true
+  
+[[redirects]]
+from = "/*"
+to = "/"
+status = 200
