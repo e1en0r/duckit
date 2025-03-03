@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "assets": ["src/assets"],
+      "components": ["src/components"],
+      "config": ["src/config"],
+      "context": ["src/context"],
+      "hooks": ["src/hooks"],
+      "icons": ["src/icons"],
+      "modals": ["src/modals"],
+      "pages": ["src/pages"],
+      "postcss": ["src/postcss"],
+      "styles": ["src/styles"],
+      "utils": ["src/utils"]
+    },
+  },
+  "include": ["src"]
+}
