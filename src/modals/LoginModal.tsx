@@ -13,6 +13,7 @@ import {
   ModalProps,
   Password,
   Rhythm,
+  SpinnerIcon,
   Textbox,
   Typography,
 } from '@phork/phorkit';
@@ -116,6 +117,7 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
               as="button"
               color="primary"
               key="login"
+              loader={<SpinnerIcon size={16} />}
               loading={isAuthenticating}
               onClick={handleLogin}
               shape="brick"
