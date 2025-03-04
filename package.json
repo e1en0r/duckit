@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^4.1.3",
     "@phork/phorkit": "^17.6.2",
     "@tanstack/react-query": "^5.66.11",
     "@types/react-router-dom": "^5.3.3",
@@ -21,8 +22,10 @@
     "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
     "react-router-dom": "^7.2.0",
-    "react-window": "^1.8.11"
+    "react-window": "^1.8.11",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.7",

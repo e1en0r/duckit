@@ -10,34 +10,41 @@ import {
   ModalFooter,
   ModalHeader,
   ModalProps,
-  Password,
   Rhythm,
   SpinnerIcon,
   Textbox,
+  Toast,
+  ToastContext,
   Typography,
 } from '@phork/phorkit';
+import { useQueryClient } from '@tanstack/react-query';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Controller, useForm } from 'react-hook-form';
+import { useCreatePost } from 'hooks/useCreatePost';
 import { useAuthenticate } from 'hooks/useAuthenticate';
+import { FETCH_DUCKS_QUERY_KEY } from 'hooks/useFetchDucks';
 
 interface FormInputs {
-  email: string;
-  password: string;
+  headline: string;
+  image: string;
 }
 
-export type LoginModalProps = Omit<ModalProps, 'children' | 'focusable' | 'size'>;
+export type CreatePostModalProps = Omit<ModalProps, 'children' | 'focusable' | 'size'>;
 
-export const LoginModal = (props: LoginModalProps): React.ReactElement => {
-  const id = 'login';
+export const CreatePostModal = (props: CreatePostModalProps): React.ReactElement => {
+  const id = 'create-post';
   const contentRef = useRef<HTMLDivElement>(null);
   const { popModal } = useContext(ModalContext);
-  const { authenticate, isAuthenticating, persist } = useAuthenticate();
+  const { createNotification } = useContext(ToastContext);
+  const queryClient = useQueryClient();
+  const { token } = useAuthenticate();
+  const createPostMutation = useCreatePost({ token });
 
   const schema = yup
     .object({
-      email: yup.string().email().required(),
-      password: yup.string().required(),
+      headline: yup.string().required(),
+      image: yup.string().url().required(),
     })
     .required();
 
@@ -50,14 +57,24 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
   // these errors are mutation errors and are separate from the schema errors
   const [error, setError] = useState<string>();
 
-  const handleAuthenticate = useCallback(
-    async ({ email, password }: FormInputs) => {
+  const handleCreatePost = useCallback(
+    async ({ headline, image }: FormInputs) => {
       setError(undefined);
 
-      if (email && password) {
+      if (headline && image) {
         try {
-          const { token } = await authenticate({ email, password });
-          persist(token);
+          await createPostMutation.mutateAsync({ headline, image });
+
+          createNotification(
+            <Toast level="success" variant="colored">
+              <Rhythm py={4}>
+                <Typography size="xlarge">Your duck was posted successfully!</Typography>
+              </Rhythm>
+            </Toast>,
+          );
+
+          // invalidate the ducks to force a refetch
+          void queryClient.invalidateQueries({ queryKey: [FETCH_DUCKS_QUERY_KEY] });
 
           // close the modal on success
           popModal();
@@ -69,16 +86,16 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
           }
         }
       } else {
-        setError('Missing email or password.');
+        setError('Missing headline or image.');
       }
     },
-    [authenticate, persist, popModal],
+    [createNotification, createPostMutation, popModal, queryClient],
   );
 
   return (
     <Modal focusable contextId={id} size="medium" {...props}>
-      <form onSubmit={event => void handleSubmit(handleAuthenticate)(event)}>
-        <ModalHeader key="header" modalId={id} title="Duckit Login" />
+      <form onSubmit={event => void handleSubmit(handleCreatePost)(event)}>
+        <ModalHeader key="header" modalId={id} title="Add a Duck" />
         <ModalBody scrollable key="content" ref={contentRef}>
           {error && (
             <Rhythm mb={3} px={4}>
@@ -88,14 +105,14 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
 
           <Controller
             control={control}
-            name="email"
+            name="headline"
             render={({ field }) => (
               <Rhythm my={3}>
                 <Textbox
                   transitional
-                  label="Email"
+                  label="Headline"
                   size="3xlarge"
-                  validity={inputErrors.email ? 'danger' : undefined}
+                  validity={inputErrors.headline ? 'danger' : undefined}
                   variant="filled"
                   {...field}
                 />
@@ -105,14 +122,14 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
 
           <Controller
             control={control}
-            name="password"
+            name="image"
             render={({ field }) => (
               <Rhythm my={3}>
-                <Password
+                <Textbox
                   transitional
-                  label="Password"
+                  label="Image URL"
                   size="3xlarge"
-                  validity={inputErrors.password ? 'danger' : undefined}
+                  validity={inputErrors.image ? 'danger' : undefined}
                   variant="filled"
                   {...field}
                 />
@@ -126,7 +143,7 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
               <Button
                 as="button"
                 color="neutral"
-                disabled={isAuthenticating}
+                disabled={createPostMutation.isPending}
                 key="cancel"
                 onClick={() => popModal()}
                 shape="brick"
@@ -140,14 +157,14 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
                 color="primary"
                 key="login"
                 loader={<SpinnerIcon size={16} />}
-                loading={isAuthenticating}
-                onClick={event => void handleSubmit(handleAuthenticate)(event)}
+                loading={createPostMutation.isPending}
+                onClick={event => void handleSubmit(handleCreatePost)(event)}
                 shape="brick"
                 size="large"
                 type="submit"
                 weight="shaded"
               >
-                <Typography variants="medium-caps">Login</Typography>
+                <Typography variants="medium-caps">Add Duck</Typography>
               </Button>
             </ButtonGroup>
           </Flex>

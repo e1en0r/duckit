@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { ModalContext, ModalContextValue } from '@phork/phorkit';
 import { BrowserRouter } from 'react-router-dom';
 import { PageHeader } from 'components/PageHeader';
@@ -14,10 +14,6 @@ vi.mock('hooks/useAuthenticate', () => ({
 }));
 
 describe('<PageHeader />', () => {
-  afterEach(() => {
-    vi.resetAllMocks();
-  });
-
   it('should render a title', () => {
     const { getByText } = render(
       <BrowserRouter>
@@ -33,10 +29,10 @@ describe('<PageHeader />', () => {
 
   it('should render a login button that triggers a login modal on click', async () => {
     const user = userEvent.setup();
-    const createModal = vi.fn();
+    const mockCreateModal = vi.fn();
 
     const { getByRole, getByText } = render(
-      <ModalContext.Provider value={{ createModal } as unknown as ModalContextValue}>
+      <ModalContext.Provider value={{ createModal: mockCreateModal } as unknown as ModalContextValue}>
         <AuthenticationContext.Provider value={[undefined, vi.fn()]}>
           <BrowserRouter>
             <PageHeader />
@@ -50,7 +46,29 @@ describe('<PageHeader />', () => {
     const button = getByRole('button');
     await user.click(button);
 
-    expect(createModal).toHaveBeenCalledTimes(1);
+    expect(mockCreateModal).toHaveBeenCalledTimes(1);
+  });
+
+  it('should render a create post button that triggers a create post modal on click', async () => {
+    const user = userEvent.setup();
+    const mockCreateModal = vi.fn();
+
+    const { getByRole, getByText } = render(
+      <ModalContext.Provider value={{ createModal: mockCreateModal } as unknown as ModalContextValue}>
+        <AuthenticationContext.Provider value={['mockToken', vi.fn()]}>
+          <BrowserRouter>
+            <PageHeader />
+          </BrowserRouter>
+        </AuthenticationContext.Provider>
+      </ModalContext.Provider>,
+    );
+
+    expect(getByText('Create Post')).toBeInTheDocument();
+
+    const button = getByRole('button', { name: /Create Post/ });
+    await user.click(button);
+
+    expect(mockCreateModal).toHaveBeenCalledTimes(1);
   });
 
   it('should render a logout button that calls logout on click', async () => {
@@ -60,16 +78,16 @@ describe('<PageHeader />', () => {
     vi.mocked(useAuthenticate).mockReturnValue({ logout: logoutSpy } as unknown as UseAuthenticateResponse);
 
     const { getByRole, getByText } = render(
-      <BrowserRouter>
-        <AuthenticationContext.Provider value={['mockToken', vi.fn()]}>
+      <AuthenticationContext.Provider value={['mockToken', vi.fn()]}>
+        <BrowserRouter>
           <PageHeader />
-        </AuthenticationContext.Provider>
-      </BrowserRouter>,
+        </BrowserRouter>
+      </AuthenticationContext.Provider>,
     );
 
     expect(getByText('Logout')).toBeInTheDocument();
 
-    const button = getByRole('button');
+    const button = getByRole('button', { name: /Logout/ });
     await user.click(button);
 
     expect(logoutSpy).toHaveBeenCalled();
