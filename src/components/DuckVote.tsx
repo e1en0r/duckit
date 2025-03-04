@@ -9,7 +9,7 @@ import {
   ToastContext,
   Typography,
 } from '@phork/phorkit';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useAuthenticate } from 'hooks/useAuthenticate';
 import { Duck } from 'types/duck';
 import { VOTE_DIRECTION, useDuckVote, DuckVoteVariables } from 'hooks/useDuckVote';
@@ -36,6 +36,9 @@ export const DuckVote = ({ record }: DuckVoteProps): React.ReactElement => {
 
   // optimistically track the votes
   const [upvotes, setUpvotes] = useState<number>(record.upvotes || 0);
+
+  // if the vote count changes externally then update the state
+  useEffect(() => setUpvotes(record.upvotes), [record.upvotes]);
 
   // this optimistically updates the vote count and then resets again if failure
   const vote = useCallback(
