@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { ModalContext, ModalContextValue } from '@phork/phorkit';
+import { BrowserRouter } from 'react-router-dom';
 import { PageHeader } from 'components/PageHeader';
 import { AuthenticationContext } from 'context/AuthenticationContext';
 import { useAuthenticate, UseAuthenticateResponse } from 'hooks/useAuthenticate';
@@ -19,9 +20,11 @@ describe('<PageHeader />', () => {
 
   it('should render a title', () => {
     const { getByText } = render(
-      <AuthenticationContext.Provider value={[undefined, vi.fn()]}>
-        <PageHeader />
-      </AuthenticationContext.Provider>,
+      <BrowserRouter>
+        <AuthenticationContext.Provider value={[undefined, vi.fn()]}>
+          <PageHeader />
+        </AuthenticationContext.Provider>
+      </BrowserRouter>,
     );
 
     expect(getByText('Duckit')).toBeInTheDocument();
@@ -35,7 +38,9 @@ describe('<PageHeader />', () => {
     const { getByRole, getByText } = render(
       <ModalContext.Provider value={{ createModal } as unknown as ModalContextValue}>
         <AuthenticationContext.Provider value={[undefined, vi.fn()]}>
-          <PageHeader />
+          <BrowserRouter>
+            <PageHeader />
+          </BrowserRouter>
         </AuthenticationContext.Provider>
       </ModalContext.Provider>,
     );
@@ -55,9 +60,11 @@ describe('<PageHeader />', () => {
     vi.mocked(useAuthenticate).mockReturnValue({ logout: logoutSpy } as unknown as UseAuthenticateResponse);
 
     const { getByRole, getByText } = render(
-      <AuthenticationContext.Provider value={['mockToken', vi.fn()]}>
-        <PageHeader />
-      </AuthenticationContext.Provider>,
+      <BrowserRouter>
+        <AuthenticationContext.Provider value={['mockToken', vi.fn()]}>
+          <PageHeader />
+        </AuthenticationContext.Provider>
+      </BrowserRouter>,
     );
 
     expect(getByText('Logout')).toBeInTheDocument();
