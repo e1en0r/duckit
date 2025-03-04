@@ -1,8 +1,18 @@
 import { Button, Header, Rhythm, Typography } from '@phork/phorkit';
+import { Link } from 'react-router-dom';
+import styled from '@emotion/styled';
 import { Headline } from 'components/Headline';
 import { LoginButton } from 'components/LoginButton';
 import { LogoutButton } from 'components/LogoutButton';
 import { useAuthenticationContext } from 'context/useAuthenticationContext';
+
+const StyledLink = styled(Link)`
+  color: currentColor;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 
 export const PageHeader = (): React.ReactElement => {
   const [token] = useAuthenticationContext();
@@ -10,7 +20,9 @@ export const PageHeader = (): React.ReactElement => {
   return (
     <Rhythm px={8}>
       <Header bordered full variant="primary">
-        <Headline>Duckit</Headline>
+        <StyledLink to="/">
+          <Headline>Duckit</Headline>
+        </StyledLink>
 
         {token ? (
           <LogoutButton>

@@ -64,17 +64,25 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
     void handleAuthenticate();
   }, [handleAuthenticate]);
 
+  const handleSubmit = useCallback<React.FormEventHandler>(
+    event => {
+      event.preventDefault();
+      handleLogin();
+    },
+    [handleLogin],
+  );
+
   return (
     <Modal focusable contextId={id} size="medium" {...props}>
-      <ModalHeader key="header" modalId={id} title="Duckit Login" />
-      <ModalBody scrollable key="content" ref={contentRef}>
-        {error && (
-          <Rhythm mb={3} px={4}>
-            <Banner level="danger">{error}</Banner>
-          </Rhythm>
-        )}
+      <form onSubmit={handleSubmit}>
+        <ModalHeader key="header" modalId={id} title="Duckit Login" />
+        <ModalBody scrollable key="content" ref={contentRef}>
+          {error && (
+            <Rhythm mb={3} px={4}>
+              <Banner level="danger">{error}</Banner>
+            </Rhythm>
+          )}
 
-        <form onSubmit={handleLogin}>
           <Rhythm my={3}>
             <Textbox
               transitional
@@ -96,39 +104,40 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
               variant="filled"
             />
           </Rhythm>
-        </form>
-      </ModalBody>
-      <ModalFooter key="footer">
-        <Flex direction="row" justifyContent="flex-end">
-          <ButtonGroup spacing="cozy">
-            <Button
-              as="button"
-              color="neutral"
-              disabled={isAuthenticating}
-              key="cancel"
-              onClick={() => popModal()}
-              shape="brick"
-              size="large"
-              weight="ghost"
-            >
-              <Typography variants="medium-caps">Cancel</Typography>
-            </Button>
-            <Button
-              as="button"
-              color="primary"
-              key="login"
-              loader={<SpinnerIcon size={16} />}
-              loading={isAuthenticating}
-              onClick={handleLogin}
-              shape="brick"
-              size="large"
-              weight="shaded"
-            >
-              <Typography variants="medium-caps">Login</Typography>
-            </Button>
-          </ButtonGroup>
-        </Flex>
-      </ModalFooter>
+        </ModalBody>
+        <ModalFooter key="footer">
+          <Flex direction="row" justifyContent="flex-end">
+            <ButtonGroup spacing="cozy">
+              <Button
+                as="button"
+                color="neutral"
+                disabled={isAuthenticating}
+                key="cancel"
+                onClick={() => popModal()}
+                shape="brick"
+                size="large"
+                weight="ghost"
+              >
+                <Typography variants="medium-caps">Cancel</Typography>
+              </Button>
+              <Button
+                as="button"
+                color="primary"
+                key="login"
+                loader={<SpinnerIcon size={16} />}
+                loading={isAuthenticating}
+                onClick={handleLogin}
+                shape="brick"
+                size="large"
+                type="submit"
+                weight="shaded"
+              >
+                <Typography variants="medium-caps">Login</Typography>
+              </Button>
+            </ButtonGroup>
+          </Flex>
+        </ModalFooter>
+      </form>
     </Modal>
   );
 };
