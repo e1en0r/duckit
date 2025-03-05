@@ -48,7 +48,7 @@ describe('DuckVote', () => {
     vi.resetAllMocks();
   });
 
-  it('renders the upvote and downvote buttons', () => {
+  it('should render the upvote and downvote buttons', () => {
     const { getByTitle } = render(
       <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
         <DuckVote record={mockDuck} />
@@ -62,8 +62,8 @@ describe('DuckVote', () => {
     expect(getByTitle('Upvote duck')).toBeInTheDocument();
   });
 
-  it('calls the vote function on upvote and updates the upvotes optimistically', () => {
-    const { getByTitle } = render(
+  it('should call the vote function on upvote and updates the upvotes optimistically', () => {
+    const { getByText, getByTitle } = render(
       <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
         <DuckVote record={mockDuck} />
       </ToastContext.Provider>,
@@ -72,12 +72,12 @@ describe('DuckVote', () => {
     const upvoteButton = getByTitle('Upvote duck');
     fireEvent.click(upvoteButton);
 
-    expect(screen.getByText('11')).toBeInTheDocument();
+    expect(getByText('11')).toBeInTheDocument();
     expect(mockMutateAsync).toHaveBeenCalledWith({ direction: 'up' });
   });
 
-  it('calls vote function on downvote and updates the upvotes optimistically', () => {
-    const { getByTitle } = render(
+  it('should call vote function on downvote and updates the upvotes optimistically', () => {
+    const { getByText, getByTitle } = render(
       <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
         <DuckVote record={mockDuck} />
       </ToastContext.Provider>,
@@ -86,11 +86,11 @@ describe('DuckVote', () => {
     const downvoteButton = getByTitle('Downvote duck');
     fireEvent.click(downvoteButton);
 
-    expect(screen.getByText('9')).toBeInTheDocument();
+    expect(getByText('9')).toBeInTheDocument();
     expect(mockMutateAsync).toHaveBeenCalledWith({ direction: 'down' });
   });
 
-  it('shows a disabled button while the mutation is pending', () => {
+  it('should show a disabled button while the mutation is pending', () => {
     vi.mocked(useDuckVote).mockReturnValue({
       mutateAsync: mockMutateAsync,
       isPending: true,
@@ -106,7 +106,26 @@ describe('DuckVote', () => {
     expect(getByTitle('Upvote duck')).toHaveAttribute('disabled');
   });
 
-  it('displays a toast notification if voting fails', async () => {
+  it('should remove the optimistic upvote on failure', async () => {
+    mockMutateAsync.mockRejectedValue(new Error('Network Error'));
+
+    const { getByTitle } = render(
+      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
+        <DuckVote record={mockDuck} />
+      </ToastContext.Provider>,
+    );
+
+    const upvoteButton = getByTitle('Upvote duck');
+    fireEvent.click(upvoteButton);
+
+    expect(screen.getByText('11')).toBeInTheDocument();
+
+    await waitFor(() => expect(mockCreateNotification).toHaveBeenCalled());
+
+    expect(screen.getByText('10')).toBeInTheDocument();
+  });
+
+  it('should display a toast notification if voting fails', async () => {
     mockMutateAsync.mockRejectedValue(new Error('Network Error'));
 
     const { getByTitle } = render(
@@ -123,7 +142,7 @@ describe('DuckVote', () => {
     expect((mockCreateNotification.mock.calls[0][0] as { props: ToastProps }).props.level).toBe('danger');
   });
 
-  it('does not allow voting without a token', () => {
+  it('should not allow voting without a token', () => {
     vi.mocked(useAuthenticate).mockReturnValue({
       token: null,
     } as unknown as UseAuthenticateResponse);

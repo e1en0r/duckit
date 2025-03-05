@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ErrorNotification } from 'components/ErrorNotification';
 
-describe('<ErrorNotification>', () => {
+describe('ErrorNotification', () => {
   it('should render the sad duck', () => {
     const { getByTitle } = render(<ErrorNotification />);
 

@@ -13,7 +13,7 @@ vi.mock('hooks/useAuthenticate', () => ({
   }),
 }));
 
-describe('<PageHeader />', () => {
+describe('PageHeader', () => {
   it('should render a title', () => {
     const { getByText } = render(
       <BrowserRouter>

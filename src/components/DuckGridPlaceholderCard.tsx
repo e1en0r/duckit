@@ -32,9 +32,12 @@ export function DuckGridPlaceholderCard(): React.ReactElement {
         <Placeholder width={Math.floor(imageSize / 2)} />
       </ImageContainer>
       <Rhythm px={5}>
-        <Flex flexible alignItems="center" direction="row" justifyContent="center">
+        <Flex flexible alignItems="center" direction="row" justifyContent="space-between">
           <Typography size="2xlarge" variants="spoiler" volume="quietest">
-            This duck is loading...
+            This duck is loading
+          </Typography>
+          <Typography size="2xlarge" variants="spoiler" volume="quietest">
+            ...
           </Typography>
         </Flex>
       </Rhythm>

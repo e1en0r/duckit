@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { PagePaper } from 'components/PagePaper';
 
-describe('<PagePaper>', () => {
+describe('PagePaper', () => {
   it('should render the content', () => {
     const { getByText } = render(<PagePaper>Hello world</PagePaper>);
     expect(getByText('Hello world')).toBeInTheDocument();
