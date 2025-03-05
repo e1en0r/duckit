@@ -31,7 +31,7 @@ export const useSignUp = () => {
           switch (error.status) {
             case 409: {
               const e = new Error('User already exists.');
-              e.name = 'missing';
+              e.name = 'duplicate';
               throw e;
             }
 

@@ -2,7 +2,7 @@ import vitest from 'eslint-plugin-vitest';
 
 export default [
   {
-    files: ['**/*.test.ts', '**/*.test.tsx'],
+    files: ['**/*.spec.ts', '**/*.spec.tsx'],
     plugins: {
       vitest,
     },

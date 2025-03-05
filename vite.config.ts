@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'; // <-- Use vitest/config instead of vite
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 
@@ -20,8 +20,8 @@ export default defineConfig({
     ],
   },
   test: {
-    globals: true, // Enables global `expect`, `describe`, etc.
-    environment: 'jsdom', // Simulates the browser for React components
-    setupFiles: './src/setupTests.ts', // Optional: Setup file for global test configs
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
   },
 });

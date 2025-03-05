@@ -23,7 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useCreatePost } from 'hooks/useCreatePost';
 import { useAuthenticate } from 'hooks/useAuthenticate';
-import { FETCH_DUCKS_QUERY_KEY } from 'hooks/useFetchDucks';
+import { FETCH_POSTS_QUERY_KEY } from 'hooks/useFetchPosts';
 
 interface FormInputs {
   headline: string;
@@ -74,7 +74,7 @@ export const CreatePostModal = (props: CreatePostModalProps): React.ReactElement
           );
 
           // invalidate the ducks to force a refetch
-          void queryClient.invalidateQueries({ queryKey: [FETCH_DUCKS_QUERY_KEY] });
+          void queryClient.invalidateQueries({ queryKey: [FETCH_POSTS_QUERY_KEY] });
 
           // close the modal on success
           popModal();
