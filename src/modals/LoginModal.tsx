@@ -138,6 +138,7 @@ export const LoginModal = (props: LoginModalProps): React.ReactElement => {
               <Button
                 as="button"
                 color="primary"
+                disabled={isAuthenticating}
                 key="login"
                 loader={<SpinnerIcon size={16} />}
                 loading={isAuthenticating}

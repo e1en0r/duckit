@@ -26,7 +26,7 @@ describe('useSignUp', () => {
 
     await act(async () => {
       const response = await result.current.mutateAsync({ email, password });
-      expect(response.token).toBe('mockToken');
+      expect(response.token).toBe('mockSignUpToken');
     });
   });
 

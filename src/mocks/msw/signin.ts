@@ -18,7 +18,7 @@ export const handlers = [
     }
 
     return HttpResponse.json({
-      token: 'mockToken',
+      token: 'mockSignInToken',
     });
   }),
 ];
