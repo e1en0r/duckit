@@ -21,6 +21,12 @@ vi.mock('hooks/useAuthenticate', () => ({
 
 const mockCreateNotification = vi.fn();
 
+const Wrapper = ({ children }: { children: React.ReactNode }) => (
+  <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
+    {children}
+  </ToastContext.Provider>
+);
+
 describe('DuckVote', () => {
   const mockDuck: Duck = {
     headline: 'Test Duck',
@@ -49,11 +55,7 @@ describe('DuckVote', () => {
   });
 
   it('should render the upvote and downvote buttons', () => {
-    const { getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     expect(getByTitle('Down arrow')).toBeInTheDocument();
     expect(getByTitle('Up arrow')).toBeInTheDocument();
@@ -63,11 +65,7 @@ describe('DuckVote', () => {
   });
 
   it('should call the vote function on upvote and updates the upvotes optimistically', () => {
-    const { getByText, getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByText, getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     const upvoteButton = getByTitle('Upvote duck');
     fireEvent.click(upvoteButton);
@@ -77,11 +75,7 @@ describe('DuckVote', () => {
   });
 
   it('should call vote function on downvote and updates the upvotes optimistically', () => {
-    const { getByText, getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByText, getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     const downvoteButton = getByTitle('Downvote duck');
     fireEvent.click(downvoteButton);
@@ -96,11 +90,7 @@ describe('DuckVote', () => {
       isPending: true,
     } as unknown as UseMutationResult<DuckVoteResponse, Error, DuckVoteVariables, unknown>);
 
-    const { getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     expect(getByTitle('Downvote duck')).toHaveAttribute('disabled');
     expect(getByTitle('Upvote duck')).toHaveAttribute('disabled');
@@ -109,11 +99,7 @@ describe('DuckVote', () => {
   it('should remove the optimistic upvote on failure', async () => {
     mockMutateAsync.mockRejectedValue(new Error('Network Error'));
 
-    const { getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     const upvoteButton = getByTitle('Upvote duck');
     fireEvent.click(upvoteButton);
@@ -128,11 +114,7 @@ describe('DuckVote', () => {
   it('should display a toast notification if voting fails', async () => {
     mockMutateAsync.mockRejectedValue(new Error('Network Error'));
 
-    const { getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     const upvoteButton = getByTitle('Upvote duck');
     fireEvent.click(upvoteButton);
@@ -147,11 +129,7 @@ describe('DuckVote', () => {
       token: null,
     } as unknown as UseAuthenticateResponse);
 
-    const { getByTitle } = render(
-      <ToastContext.Provider value={{ createNotification: mockCreateNotification } as unknown as ToastContextValue}>
-        <DuckVote record={mockDuck} />
-      </ToastContext.Provider>,
-    );
+    const { getByTitle } = render(<DuckVote record={mockDuck} />, { wrapper: Wrapper });
 
     expect(getByTitle('Downvote duck')).toHaveAttribute('disabled');
     expect(getByTitle('Upvote duck')).toHaveAttribute('disabled');

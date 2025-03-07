@@ -36,7 +36,7 @@ describe('LoginModal', () => {
     } as unknown as UseAuthenticateResponse);
   });
 
-  it('renders LoginModal and submits form successfully', async () => {
+  it('renders the login modal and submits the form successfully', async () => {
     const user = userEvent.setup();
     const { getByLabelText, getByRole } = render(<LoginModal />, { wrapper: Wrapper });
 
