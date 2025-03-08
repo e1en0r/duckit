@@ -70,6 +70,8 @@ function VirtualizedGridBase<RecordType extends BaseGridRecordType = BaseGridRec
     itemCount: records.length,
     maxColumns,
     minWidth,
+    mx,
+    my,
   });
 
   /**

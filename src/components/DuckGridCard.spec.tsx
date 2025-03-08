@@ -48,6 +48,11 @@ describe('DuckGridCard', () => {
     vi.resetAllMocks();
   });
 
+  it('should display the duck headline', () => {
+    const { getByText } = render(<DuckGridCard record={mockDuck} />);
+    expect(getByText(mockDuck.headline)).toBeInTheDocument();
+  });
+
   it('should render the duck image correctly', () => {
     render(<DuckGridCard record={mockDuck} />);
 
