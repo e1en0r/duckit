@@ -72,7 +72,7 @@ describe('useAuthenticate', () => {
 
     result.current.persist(token);
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    expect(Cookies.set).toHaveBeenCalledWith('access-token', token);
+    expect(Cookies.set).toHaveBeenCalledWith('access-token', token, { sameSite: 'strict' });
   });
 
   it('should log out by clearing token and removing cookie', () => {

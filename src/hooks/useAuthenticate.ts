@@ -42,10 +42,11 @@ export const useAuthenticate = (): UseAuthenticateResponse => {
     [signInMutation, signUpMutation],
   );
 
+  // ordinarily we'd want to use secure as a cookie option but we don't have SSL set up
   const persist = useCallback<UseAuthenticateResponse['persist']>(
     token => {
       setToken(token);
-      Cookies.set(AUTH_COOKIE_NAME, token);
+      Cookies.set(AUTH_COOKIE_NAME, token, { sameSite: 'strict' });
     },
     [setToken],
   );
