@@ -1,7 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { API_BASE_URL } from 'config/api';
-import { getApiUrlWithProxy } from 'utils/api';
 
 export interface SignInResponse {
   token: string;
@@ -18,7 +16,7 @@ export const useSignIn = () => {
     mutationFn: async ({ email, password }) => {
       try {
         const response = await axios.post(
-          getApiUrlWithProxy(`${API_BASE_URL}/signin`),
+          '/signin',
           { email, password },
           {
             headers: { 'Content-Type': 'application/json' },

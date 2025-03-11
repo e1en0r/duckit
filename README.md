@@ -1,7 +1,7 @@
 The back-end provided doesn't allow CORS, so I created an Express proxy server and have set up the Netlify app to proxy as well.
 For local development the proxy server should be started with `npm run proxy`. It can be turned on and off in `config/api.ts`.
 
-The instructions say to pass a Bearer token when upvoting and downvoting. However, when this token is passed, the back-end returns a 403 error. Strangely, when an invalid token is used, the back-end allows upvoting and downvoting. To work around this in I've added a `-WTF` string to the end of the token in `hooks/useDuckVote.ts`. The endpoint to submit a post works correctly.
+The instructions say to pass a Bearer token when upvoting and downvoting. However, when this token is passed, the back-end returns a 403 error. Strangely, when an invalid token is used, the back-end allows upvoting and downvoting. To work around this I've added a `-WTF` string to the end of the token in `hooks/useDuckVote.ts`. The endpoint to submit a post works correctly.
 
 There is no pagination from the back-end, so it's just one big fetch. This is not my preference for a real-world situation but since this is the case I haven't implemented any pagination.
 

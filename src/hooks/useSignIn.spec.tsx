@@ -1,4 +1,4 @@
-import {  beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -6,7 +6,7 @@ import { useSignIn } from './useSignIn';
 
 vi.mock('config/api', () => ({
   USE_PROXY: false,
-  API_BASE_URL: ''
+  API_BASE_URL: '',
 }));
 
 describe('useSignIn', () => {
@@ -17,7 +17,7 @@ describe('useSignIn', () => {
     queryClient = new QueryClient();
     wrapper = ({ children }) => <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   });
-  
+
   it('should sign up user successfully', async () => {
     const email = 'test@example.com';
     const password = 'password';
@@ -51,7 +51,6 @@ describe('useSignIn', () => {
       await expect(result.current.mutateAsync({ email, password })).rejects.toThrow('Incorrect email or password.');
     });
   });
-
 
   it('should handle an unknown error', async () => {
     const email = 'test@example.com';

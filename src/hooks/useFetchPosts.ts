@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { API_BASE_URL } from 'config/api';
 import { DuckResponse } from 'types/duck';
-import { getApiUrlWithProxy } from 'utils/api';
 
 export const FETCH_POSTS_QUERY_KEY = 'ducks';
 
@@ -12,7 +10,7 @@ export const useFetchPosts = () => {
     queryKey: [FETCH_POSTS_QUERY_KEY],
     queryFn: async () => {
       try {
-        const response = await axios.get(getApiUrlWithProxy(`${API_BASE_URL}/posts`));
+        const response = await axios.get('/posts');
         const data = response.data as DuckResponse;
         return data.Posts;
       } catch (error: unknown) {

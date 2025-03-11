@@ -5,20 +5,22 @@ export type ApiProxy =
       host: string;
       port: number;
       protocol: string;
+      path: string;
     }
   | {
       path: string;
     };
 
 // these are the settings for the local proxy from proxy.js
-const API_PROXY_LOCAL: ApiProxy = {
+export const API_PROXY_LOCAL: ApiProxy = {
   host: 'localhost',
   port: 3000,
   protocol: 'http',
+  path: API_BASE_URL,
 };
 
 // these are the settings for the netlify proxy
-const API_PROXY_NETLIFY: ApiProxy = {
+export const API_PROXY_NETLIFY: ApiProxy = {
   path: '/api',
 };
 

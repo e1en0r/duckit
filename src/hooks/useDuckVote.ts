@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { API_BASE_URL } from 'config/api';
 import { Duck } from 'types/duck';
-import { getApiUrlWithProxy } from 'utils/api';
 
 export const VOTE_DIRECTION = {
   UP: 'up',
@@ -42,7 +40,7 @@ export const useDuckVote = ({ record, token }: UseDuckVoteProps) => {
 
       try {
         const response = await axios.post(
-          getApiUrlWithProxy(`${API_BASE_URL}/posts/${record.id}/${direction}vote`),
+          `/posts/${record.id}/${direction}vote`,
           {},
           {
             headers: {

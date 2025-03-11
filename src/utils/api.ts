@@ -1,10 +1,10 @@
 import { API_PROXY, USE_PROXY } from 'config/api';
 
-export const getApiUrlWithProxy = (url: string): string => {
+export const getApiUrlWithProxy = (url?: string): string | undefined => {
   if (USE_PROXY) {
     if ('host' in API_PROXY) {
       if (API_PROXY.host && API_PROXY.protocol && API_PROXY.port) {
-        return `${API_PROXY.protocol}://${API_PROXY.host}:${API_PROXY.port}/${url}`;
+        return `${API_PROXY.protocol}://${API_PROXY.host}:${API_PROXY.port}${API_PROXY.path ? `/${API_PROXY.path}` : ''}${url ?? ''}`;
       } else {
         throw new Error('Invalid proxy');
       }
@@ -12,12 +12,7 @@ export const getApiUrlWithProxy = (url: string): string => {
 
     if ('path' in API_PROXY) {
       if (API_PROXY.path) {
-        const match = /^https?:\/\/(?:[^/]+\/)?(.*)$/.exec(url);
-        if (match?.[1]) {
-          return `${API_PROXY.path}/${match[1]}`;
-        } else {
-          throw new Error('Invalid API URL');
-        }
+        return `${API_PROXY.path}${url ?? ''}`;
       } else {
         throw new Error('Invalid proxy');
       }

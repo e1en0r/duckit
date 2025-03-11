@@ -1,7 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { API_BASE_URL } from 'config/api';
-import { getApiUrlWithProxy } from 'utils/api';
 
 export interface UseCreatePostProps {
   token?: string;
@@ -30,7 +28,7 @@ export const useCreatePost = ({ token }: UseCreatePostProps) => {
 
       try {
         const response = await axios.post(
-          getApiUrlWithProxy(`${API_BASE_URL}/posts`),
+          '/posts',
           { headline, image },
           {
             headers: {
