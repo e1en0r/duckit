@@ -1,13 +1,8 @@
 import { Flex, Paper, Rhythm, Typography, useThemeId } from '@phork/phorkit';
 import styled from '@emotion/styled';
 import Placeholder from 'assets/silhouette.svg?react';
-import { Duck } from 'types/duck';
 import { useGridContext } from 'components/virtualizedGrid/context';
 import { BaseGridCard } from './BaseGridCard';
-
-export interface DuckGridCardProps {
-  record: Duck;
-}
 
 const ImageContainer = styled(Paper)<{ width: number; height: number }>`
   display: flex;
